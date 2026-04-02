@@ -3,15 +3,27 @@ const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js")
 
+
 // method-override package imported and used...
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
+
+
+// Ejs mate setup...
+const ejsMate = require("ejs-mate");
+app.engine("ejs", ejsMate);
+
+// 
+
 
 // ejs and views folder setup
 const path = require("path");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
+
+// serving static files -------------------
+app.use(express.static(path.join(__dirname,"./public")));
 
 // database connection
 async function main() {
