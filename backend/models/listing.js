@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const Review = require("./reviews");
+//  requiring wrapAsync function-------------
+const wrapAsync = require("../utils/wrapAsync");
 const Schema = mongoose.Schema;
 let listingSchema = new Schema({
     title: {
@@ -22,8 +25,20 @@ let listingSchema = new Schema({
     },
     country: {
         type: String
-    }
+    },
+    reviews: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Review"
+        }
+    ]
 
+});
+
+listingSchema.post("findOneAndDelete", async (listing) => {
+    if (listing.reviews.length) {
+        await Review.deleteMany({ _id: { $in: listing.reviews } });
+    }
 });
 
 const Listing = mongoose.model("Listing", listingSchema);

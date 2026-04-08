@@ -1,4 +1,5 @@
-<%layout("layouts/boilerplate")%>
+<% let path="layouts/boilerplate" ; %>
+    <%layout(path)%>
 
     <div class="row">
 
@@ -8,27 +9,29 @@
             <form method="post" action="/listing" novalidate class="needs-validation">
                 <div class="mb-3">
                     <label class="form-label" for="title">Title</label>
-                    <input required name="listing[title]" type="text" placeholder="Enter the title" class="form-control">
+                    <input required name="listing[title]" type="text" placeholder="Enter the title"
+                        class="form-control">
                     <div class="invalid-feedback">Please enter Title !</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="description">Description</label>
-                    <textarea required class="form-control" name="listing[description]" placeholder="Enter the Description"
-                        cols="30" rows="2"></textarea>
+                    <textarea required class="form-control" name="listing[description]"
+                        placeholder="Enter the Description" cols="30" rows="2"></textarea>
                     <div class="invalid-feedback">Please enter short description !</div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label" for="image">Image Link</label>
-                    <input name="listing[img]" type="text" class="form-control" placeholder="Enter the image URL/link :">
+                    <input name="listing[img]" type="text" class="form-control"
+                        placeholder="Enter the image URL/link :">
                 </div>
 
                 <div class="row">
                     <div class="mb-3 col-md-4">
                         <label class="form-label" for="price">Price</label>
                         <!-- type="number" -->
-                        <input required name="listing[price]" class="form-control"  placeholder="Enter the Price :">
+                        <input required name="listing[price]" class="form-control" placeholder="Enter the Price :">
                         <div class="invalid-feedback">Please enter valid price !</div>
                     </div>
 
@@ -41,7 +44,8 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="location">Location</label>
-                    <input required name="listing[location]" type="text" class="form-control" placeholder="Enter the location :">
+                    <input required name="listing[location]" type="text" class="form-control"
+                        placeholder="Enter the location :">
                     <div class="invalid-feedback">Please enter valid Location !</div>
                 </div>
 

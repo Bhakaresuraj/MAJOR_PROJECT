@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js")
+const Rivew = require("./models/reviews.js")
 
 //  requiring wrapAsync function-------------
 const wrapAsync = require("./utils/wrapAsync.js");
@@ -9,7 +10,8 @@ const ExpressError = require("./utils/ExpressError.js");
 
 
 // listingSchema for schema validation 
-const { listingSchema } = require("./Schema.js");
+const { listingSchema, reviewSchema } = require("./Schema.js");
+
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
     if (error) {
@@ -21,6 +23,18 @@ const validateListing = (req, res, next) => {
     }
 
 }
+const validateReview = (req, res, next) => {
+    let { error } = reviewSchema.validate(req.body);
+    if (error) {
+        let errMsg = error.details.map((el) => el.message).join(",");
+        console.log(errMsg)
+        throw new ExpressError(400, errMsg);
+    } else {
+        next();
+    }
+}
+
+
 
 // method-override package imported and used...
 const methodOverride = require("method-override");
@@ -33,6 +47,7 @@ app.engine("ejs", ejsMate);
 
 // ejs and views folder setup
 const path = require("path");
+const Review = require("./models/reviews.js");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
@@ -84,7 +99,7 @@ app.post("/listing", validateListing, wrapAsync(async (req, res, next) => {
 
     let listing = req.body.listing;
     let result = await Listing.insertOne(listing);
-    console.log("Listing Successful :", result);
+    // console.log("Listing Successful :", result);
     res.redirect("/listing");
 }));
 
@@ -93,7 +108,7 @@ app.post("/listing", validateListing, wrapAsync(async (req, res, next) => {
 // view route
 app.get("/listing/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let listing = await Listing.findById(id);
+    let listing = await Listing.findById(id).populate("reviews");
     // console.log(list);
     res.render("listing/show.ejs", { listing });
 }));
@@ -118,13 +133,35 @@ app.patch("/listing/:id", validateListing, wrapAsync(async (req, res) => {
 
 app.delete("/listing/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    await Listing.findByIdAndDelete(id).then((result) => {
-        console.log("Deleted Listing : ", result);
-    }).catch((err) => {
-        console.log("Error while deleting listing : ", err);
-    })
+    await Listing.findByIdAndDelete(id);
     res.redirect("/listing");
 }));
+
+
+// Reviews ... 
+// post route for rivew 
+app.post("/listing/:id/reviews", validateReview, wrapAsync(async (req, res) => {
+    // console.log(req.params.id);
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new Review(req.body.review);
+    listing.reviews.push(newReview);
+    await newReview.save();
+    await listing.save();
+    // console.log("new rivew saved");
+    res.redirect(`/listing/${listing._id}`);
+
+
+}));
+
+// delete route for rivew 
+app.delete("/listing/:id/reviews/:reviewid", wrapAsync(async (req, res) => {
+    let { id, reviewid } = req.params;
+    await Listing.findByIdAndUpdate(id, { $pull: { reviews: reviewid } });
+    await Review.findByIdAndDelete(reviewid);
+    res.redirect(`/listing/${id}`);
+
+}));
+
 
 // for route not found error--------
 app.use((req, res, next) => {
@@ -133,7 +170,11 @@ app.use((req, res, next) => {
 
 // custom error handler
 app.use((err, req, res, next) => {
+    console.log(err);
     let { statusCode = 500, message = "Something went wrong......" } = err;
     res.status(statusCode).render("error.ejs", { err });
     // res.status(statusCode).send(message);
 })
+
+
+
