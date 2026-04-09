@@ -1,13 +1,24 @@
 const express = require("express");
 const app = express();
-const users =require("./routes/user");
-const posts =require("./routes/post");
+const users = require("./routes/user");
+const posts = require("./routes/post");
+const cookies = require("./routes/cookies");
+const cookieParser = require("cookie-parser");
+app.use(cookieParser("secretcode"));
+app.use("/users", users);
+app.use("/posts", posts);
+app.use("/cookies", cookies);
 
-app.use("/users",users);
-app.use("/posts",posts);
+
+
+// Cookies and signed cookies 
 
 app.get("/", (req, res) => {
-    res.send("THis is root route");
+    let { name = "Dipak" } = req.cookies;
+    let { greet } = req.signedCookies;
+    console.log(greet);
+    res.send(`Hey ${name} , ${greet} !`);
+
 })
 
 app.listen(3000, () => {
