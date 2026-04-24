@@ -1,25 +1,36 @@
+
 const express = require("express");
 const app = express();
+const path = require("path");
 
 
+// app.use(path.join(__dirname))
 const session = require('express-session')
+const sessionOpt = {
+    secret: "mysupersecreatestring",
+    resave: false,
+    saveUninitialized: true
+}
 
-app.use(session({
-    secret :"mysupersecreatestring"
-}))
+app.use(session(sessionOpt))
 
-app.get("/test",(req,res)=>{
-    res.send("test successful !"); 
+
+// Session in the express 
+// app.get("/session", (req, res) => {
+//     if (req.session.count) {
+//         req.session.count++;
+//     } else {
+//         req.session.count = 1;
+//     }
+
+//     res.send(`request count is ${req.session.count}`);
+// })
+
+app.get("/", (req, res) => {
+    let cwd = path.join(__dirname);
+    res.send(`server is running fine ....... ( ${cwd}) `);
+    // console.log(cwd);
 })
-
-
-
-
-
-
-
-
-
 
 
 
@@ -45,7 +56,9 @@ app.get("/test",(req,res)=>{
 // })
 
 app.listen(3000, () => {
-    console.log("Server is running ....");
+    let cwd = path.join(__dirname, "");
+    console.log(cwd);
+    console.log("Server is running on 3000 ..... ....");
 });
 
 
