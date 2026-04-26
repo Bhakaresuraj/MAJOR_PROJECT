@@ -2,6 +2,7 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const flash =require("connect-flash")
 
 
 // app.use(path.join(__dirname))
@@ -13,7 +14,7 @@ const sessionOpt = {
 }
 
 app.use(session(sessionOpt))
-
+app.use(flash());
 
 // Session in the express 
 // app.get("/session", (req, res) => {
@@ -26,13 +27,20 @@ app.use(session(sessionOpt))
 //     res.send(`request count is ${req.session.count}`);
 // })
 
-app.get("/", (req, res) => {
-    let cwd = path.join(__dirname);
-    res.send(`server is running fine ....... ( ${cwd}) `);
-    // console.log(cwd);
+
+
+app.get("/register", (req, res) => {
+    let { name = "anonynous" } = req.query;
+    req.session.name = name;
+    console.log(req.session);
+    res.send(name);
 })
 
-
+app.get("/home", (req, res) => {
+    
+    console.log(req.session.name);
+    res.send(`Name :${req.session.name}`);
+})
 
 
 // const users = require("./routes/user");
