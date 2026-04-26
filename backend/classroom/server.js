@@ -2,8 +2,9 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const flash =require("connect-flash")
-
+const flash = require("connect-flash")
+// const path =require("path");
+app.set("views", path.join(__dirname, "/views"));
 
 // app.use(path.join(__dirname))
 const session = require('express-session')
@@ -27,19 +28,32 @@ app.use(flash());
 //     res.send(`request count is ${req.session.count}`);
 // })
 
+app.use((req, res, next) => {
+    res.locals.succmessage = req.flash("success");
+    res.locals.errmessage = req.flash("error");
+    next();
+});
 
 
 app.get("/register", (req, res) => {
     let { name = "anonynous" } = req.query;
     req.session.name = name;
-    console.log(req.session);
-    res.send(name);
+    // console.log(req.session);
+    if (name !== "anonynous") {
+        req.flash("success", `New user added....!`);
+    } else {
+        req.flash("error", ` user Not  added....!`);
+    }
+    res.redirect("/home");
 })
 
 app.get("/home", (req, res) => {
-    
-    console.log(req.session.name);
-    res.send(`Name :${req.session.name}`);
+    // console.log(req.session.name);
+    // console.log(req.flash("Info"));
+    //  once you access the flash msg it will automatically gets deleted from flash so you will not access it second time .
+
+    res.render("page.ejs", { name: req.session.name });
+
 })
 
 
