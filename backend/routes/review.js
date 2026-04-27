@@ -18,8 +18,6 @@ const validateReview = (req, res, next) => {
         next();
     }
 }
-
-
 // Reviews ... 
 // post route for rivew 
 router.post("/", validateReview, wrapAsync(async (req, res) => {

@@ -16,7 +16,6 @@ const validateListing = (req, res, next) => {
     } else {
         next();
     }
-
 }
 
 // listing model index route

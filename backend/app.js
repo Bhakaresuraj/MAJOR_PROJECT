@@ -1,40 +1,30 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-
-
 const Listing = require("./models/listing.js")
 const Review = require("./models/reviews.js");
 // requiring modules....
 const listing = require("./routes/listing.js");
 const reviews = require("./routes/review.js");
-
 //  requiring wrapAsync function-------------
 const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-
-
 // listingSchema for schema validation 
 const { listingSchema, reviewSchema } = require("./Schema.js");
-
-
 // method-override package imported and used...
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
-
-
 // Ejs mate setup...
 const ejsMate = require("ejs-mate");
 app.engine("ejs", ejsMate);
-
 // ejs and views folder setup
 const path = require("path");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
-
 // serving static files -------------------
 app.use(express.static(path.join(__dirname, "./public")));
+
 
 // database connection
 async function main() {
@@ -46,11 +36,7 @@ main().then(() => {
     console.log("Error in database connecting :", err);
 });
 
-//  listing the request.........
-let port = 8080;
-app.listen(port, () => {
-    console.log("Server is runninng");
-});
+
 
 //  root route
 app.get("/", (req, res) => {
@@ -58,7 +44,7 @@ app.get("/", (req, res) => {
 });
 
 
-
+//  main page routes 
 app.use("/listing", listing);
 app.use("/listing/:id/reviews", reviews);
 
@@ -76,5 +62,13 @@ app.use((err, req, res, next) => {
     // res.status(statusCode).send(message);
 })
 
+
+
+
+//  listing the request.........
+let port = 8080;
+app.listen(port, () => {
+    console.log("Server is runninng");
+});
 
 
