@@ -26,6 +26,24 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "./public")));
 
 
+// using flash for messages ......
+
+
+
+// Adding sessions to the project ........
+const sessions = require("express-session");
+const sessiosOpt = {
+    secret: "Mysecretecode",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true
+    }
+}
+app.use(sessions(sessiosOpt));
+
 // database connection
 async function main() {
     await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
@@ -43,7 +61,14 @@ app.get("/", (req, res) => {
     res.send("working");
 });
 
+const flash = require("connect-flash");
+app.use(flash());
 
+app.use((req, res, next) => {
+    res.locals.listingSuccess = req.flash("listingSuccess");
+    res.locals.error = req.flash("error");
+    next();
+})
 //  main page routes 
 app.use("/listing", listing);
 app.use("/listing/:id/reviews", reviews);

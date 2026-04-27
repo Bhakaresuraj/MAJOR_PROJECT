@@ -1,28 +1,27 @@
 <% let path="layouts/boilerplate" ; %>
-    <%layout(path)%>>
+    <%layout(path)%>
 
-        <body>
-            <h1>All listings</h1>
-            <div class="row row-cols-lg-3">
-                <%for(let listing of allListings){%>
-                    <a href="/listing/<%=listing._id%>" class="listing-link">
-                        <div class="card listing-card">
-                            <img src="<%=listing.img%>" class="card-img-top" alt="listing image" style="height: 20rem;">
-                            <div class="card-img-overlay"></div>
-                            <div class="card-body">
-                                <p class="card-text">
-                                    <B>
-                                        <%=listing.title%>
-                                    </B><br>
-                                    &#8377;<%=listing.price.toLocaleString("en-IN")%><br>
-                                </p>
-                            </div>
+        <h1>All listings</h1>
+        <div class="row row-cols-lg-3">
+            <%for(let listing of allListings){%>
+                <a href="/listing/<%=listing._id%>" class="listing-link">
+                    <div class="card listing-card">
+                        <img src="<%=listing.img%>" class="card-img-top" alt="listing image" style="height: 20rem;">
+                        <div class="card-img-overlay"></div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <B>
+                                    <%=listing.title%>
+                                </B><br>
+                                &#8377;<%=listing.price.toLocaleString("en-IN")%><br>
+                            </p>
                         </div>
-                    </a>
-                    <%}%>
-            </div>
-            <!-- <ul> -->
-            <!-- <%for(let list of allListings){%>
+                    </div>
+                </a>
+                <%}%>
+        </div>
+        <!-- <ul> -->
+        <!-- <%for(let list of allListings){%>
                 <li>
                     <a href="listing/<%=list._id%>">
                         <%=list.title%>
@@ -30,9 +29,8 @@
 
                 </li>
                 <%}%> -->
-            <!-- </ul> -->
-            <!-- <br> -->
-            <!-- <form method="GET" action="/listing/new">
+        <!-- </ul> -->
+        <!-- <br> -->
+        <!-- <form method="GET" action="/listing/new">
             <button>New Listing</button>
         </form> -->
-        </body>
