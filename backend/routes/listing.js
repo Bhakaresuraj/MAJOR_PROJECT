@@ -7,7 +7,7 @@ const ExpressError = require("../utils/ExpressError.js");
 // listingSchema for schema validation 
 const { listingSchema } = require("../Schema.js");
 
-
+const { isLogedIn } = require("../middleware.js");
 const validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
     if (error) {
@@ -29,7 +29,7 @@ router.get("/", wrapAsync(async (req, res) => {
 
 // create new listing 
 
-router.get("/new", (req, res) => {
+router.get("/new", isLogedIn ,(req, res) => {
     res.render("listing/new.ejs");
 });
 router.post("/", validateListing, wrapAsync(async (req, res, next) => {
@@ -64,8 +64,9 @@ router.get("/:id", wrapAsync(async (req, res) => {
 
 
 // Update route........
-router.get("/:id/edit", wrapAsync(async (req, res) => {
+router.get("/:id/edit", isLogedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
+
     let listing = await Listing.findById(id);
     if (!listing) {
         req.flash("error", "The listing you request does not exists");
@@ -86,7 +87,7 @@ router.patch("/:id", validateListing, wrapAsync(async (req, res) => {
 
 // Destroy route.....
 
-router.delete("/:id", wrapAsync(async (req, res) => {
+router.delete("/:id",isLogedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndDelete(id);
 

@@ -1,16 +1,17 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
-const Listing = require("./models/listing.js")
-const Review = require("./models/reviews.js");
-// requiring modules....
-const listing = require("./routes/listing.js");
-const reviews = require("./routes/review.js");
+
+// requiring modules routes ....
+const listingRouter = require("./routes/listing.js");
+const reviewsRouter = require("./routes/review.js");
+const userRouter =require("./routes/user.js");
+
 //  requiring wrapAsync function-------------
-const wrapAsync = require("./utils/wrapAsync.js");
+// const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
 // listingSchema for schema validation 
-const { listingSchema, reviewSchema } = require("./Schema.js");
+// const { listingSchema, reviewSchema } = require("./Schema.js");
 // method-override package imported and used...
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
@@ -24,14 +25,17 @@ app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
 // serving static files -------------------
 app.use(express.static(path.join(__dirname, "./public")));
-
-
 // using flash for messages ......
-
-
+const flash = require("connect-flash");
+// requiring passport for authentication.....(2d)
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+// checking for loged in or not ..........
+const isLogedIn=require("./middleware.js");
 
 // Adding sessions to the project ........
 const sessions = require("express-session");
+const User = require("./models/user.js");
 const sessiosOpt = {
     secret: "Mysecretecode",
     resave: false,
@@ -42,7 +46,6 @@ const sessiosOpt = {
         httpOnly: true
     }
 }
-app.use(sessions(sessiosOpt));
 
 // database connection
 async function main() {
@@ -61,17 +64,39 @@ app.get("/", (req, res) => {
     res.send("working");
 });
 
-const flash = require("connect-flash");
+// using sessions middleware ...
+app.use(sessions(sessiosOpt));
+// using flash middleware
 app.use(flash());
+
+// initilize passport 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 app.use((req, res, next) => {
     res.locals.listingSuccess = req.flash("listingSuccess");
     res.locals.error = req.flash("error");
     next();
 })
+
+app.get("/demouser", async (req, res) => {
+    let fakeUser = new User({
+        email: "suraj@gmail.com",
+        username: "DeltaStudent"
+    });
+    let registeredUser = await User.register(fakeUser, "bhakare");
+    console.log("registeredUser :", registeredUser);
+    res.send(registeredUser);
+})
+
 //  main page routes 
-app.use("/listing", listing);
-app.use("/listing/:id/reviews", reviews);
+app.use("/listing", listingRouter);
+app.use("/listing/:id/reviews", reviewsRouter);
+app.use("/",userRouter);
 
 
 // for route not found error--------
