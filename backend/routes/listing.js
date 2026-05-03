@@ -29,7 +29,7 @@ router.get("/", wrapAsync(async (req, res) => {
 
 // create new listing 
 
-router.get("/new", isLogedIn ,(req, res) => {
+router.get("/new", isLogedIn, (req, res) => {
     res.render("listing/new.ejs");
 });
 router.post("/", validateListing, wrapAsync(async (req, res, next) => {
@@ -42,7 +42,7 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     let listing = req.body.listing;
     let result = await Listing.insertOne(listing);
     // console.log("Listing Successful :", result);
-    req.flash("listingSuccess", "New Listing Added Successfully ...!");
+    req.flash("success", "New Listing Added Successfully ...!");
     res.redirect("/listing");
 }));
 
@@ -81,17 +81,17 @@ router.patch("/:id", validateListing, wrapAsync(async (req, res) => {
     let result = await Listing.findOneAndReplace({ _id: id }, list.listing, { returnDocument: 'after' });
     // console.log("Successfully edited  :", result);
     let route = `/listing/${id}`;
-    req.flash("listingSuccess", " Listing Updated Successfully ...!");
+    req.flash("success", " Listing Updated Successfully ...!");
     res.redirect(route);
 }));
 
 // Destroy route.....
 
-router.delete("/:id",isLogedIn, wrapAsync(async (req, res) => {
+router.delete("/:id", isLogedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
     await Listing.findByIdAndDelete(id);
 
-    req.flash("listingSuccess", "Listing Deleted Successfully ...!");
+    req.flash("success", "Listing Deleted Successfully ...!");
 
     res.redirect("/listing");
 }));

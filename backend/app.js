@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 // requiring modules routes ....
 const listingRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
-const userRouter =require("./routes/user.js");
+const userRouter = require("./routes/user.js");
 
 //  requiring wrapAsync function-------------
 // const wrapAsync = require("./utils/wrapAsync.js");
@@ -31,7 +31,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 // checking for loged in or not ..........
-const isLogedIn=require("./middleware.js");
+const isLogedIn = require("./middleware.js");
 
 // Adding sessions to the project ........
 const sessions = require("express-session");
@@ -78,7 +78,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.use((req, res, next) => {
-    res.locals.listingSuccess = req.flash("listingSuccess");
+    res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
 })
@@ -96,7 +96,7 @@ app.get("/demouser", async (req, res) => {
 //  main page routes 
 app.use("/listing", listingRouter);
 app.use("/listing/:id/reviews", reviewsRouter);
-app.use("/",userRouter);
+app.use("/", userRouter);
 
 
 // for route not found error--------
