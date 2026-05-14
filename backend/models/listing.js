@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Review = require("./reviews");
+const User = require("./user");
 //  requiring wrapAsync function-------------
 const wrapAsync = require("../utils/wrapAsync");
 const Schema = mongoose.Schema;
@@ -31,7 +32,11 @@ let listingSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "Review"
         }
-    ]
+    ],
+    owner :{
+        type : Schema.Types.ObjectId,
+        ref: "User"
+    }
 
 });
 

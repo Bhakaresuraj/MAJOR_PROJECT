@@ -38,8 +38,8 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
     // if (!req.body.listing) {
     //     throw new ExpressError(400, "Please Send Valid data ...!");
     // }
-
     let listing = req.body.listing;
+    listing.owner = req.user._id;
     let result = await Listing.insertOne(listing);
     // console.log("Listing Successful :", result);
     req.flash("success", "New Listing Added Successfully ...!");
@@ -51,8 +51,9 @@ router.post("/", validateListing, wrapAsync(async (req, res, next) => {
 // view route
 router.get("/:id", wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let listing = await Listing.findById(id).populate("reviews");
-    // console.log(list);
+    // console.log(req.user);
+    let listing = await Listing.findById(id).populate("reviews").populate("owner");
+    console.log(listing);
     if (!listing) {
         req.flash("error", "The listing you request does not exists");
 
@@ -66,7 +67,6 @@ router.get("/:id", wrapAsync(async (req, res) => {
 // Update route........
 router.get("/:id/edit", isLogedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
-
     let listing = await Listing.findById(id);
     if (!listing) {
         req.flash("error", "The listing you request does not exists");
@@ -77,6 +77,7 @@ router.get("/:id/edit", isLogedIn, wrapAsync(async (req, res) => {
 }));
 router.patch("/:id", validateListing, wrapAsync(async (req, res) => {
     let list = req.body;
+    console.log("Update list :", list)
     let { id } = req.params;
     let result = await Listing.findOneAndReplace({ _id: id }, list.listing, { returnDocument: 'after' });
     // console.log("Successfully edited  :", result);

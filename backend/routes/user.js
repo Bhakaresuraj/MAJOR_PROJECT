@@ -39,8 +39,6 @@ router.post("/login", redirectUrl, passport.authenticate('local',
     }
 )
     , async (req, res) => {
-
-
         req.flash("success", "You are loged in successfully....!");
         let redirectUrl = res.locals.redirectUrl || "/listing";
         console.log("route :  ",redirectUrl);
