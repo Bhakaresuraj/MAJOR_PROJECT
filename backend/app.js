@@ -9,29 +9,35 @@ const userRouter = require("./routes/user.js");
 
 //  requiring wrapAsync function-------------
 // const wrapAsync = require("./utils/wrapAsync.js");
+
 const ExpressError = require("./utils/ExpressError.js");
+
 // listingSchema for schema validation 
 // const { listingSchema, reviewSchema } = require("./Schema.js");
+
 // method-override package imported and used...
 const methodOverride = require("method-override");
 app.use(methodOverride("_method"));
+
 // Ejs mate setup...
 const ejsMate = require("ejs-mate");
 app.engine("ejs", ejsMate);
+
 // ejs and views folder setup
 const path = require("path");
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "/views"));
 app.use(express.urlencoded({ extended: true }));
+
 // serving static files -------------------
 app.use(express.static(path.join(__dirname, "./public")));
+
 // using flash for messages ......
 const flash = require("connect-flash");
+
 // requiring passport for authentication.....(2d)
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-// checking for loged in or not ..........
-const isLogedIn = require("./middleware.js");
 
 // Adding sessions to the project ........
 const sessions = require("express-session");
@@ -81,7 +87,7 @@ app.use((req, res, next) => {
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser =req.user;
-    console.log(res.locals.currUser);
+    // console.log("res.local.currUser where i am storing it (1):",res.locals.currUser);
     next();
 })
 
