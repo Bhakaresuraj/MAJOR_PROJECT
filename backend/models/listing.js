@@ -13,9 +13,8 @@ let listingSchema = new Schema({
         type: String
     },
     img: {
-        type: String,
-        default: "https://media.istockphoto.com/id/483724081/photo/yosemite-valley-landscape-and-river-california.jpg?s=612x612&w=0&k=20&c=QQ7rvq0Qbfpkug1Wbd36PGqkOntoPFKWxiE4w4tV-NE=",
-        set: (v) => v === "" ? "https://media.istockphoto.com/id/483724081/photo/yosemite-valley-landscape-and-river-california.jpg?s=612x612&w=0&k=20&c=QQ7rvq0Qbfpkug1Wbd36PGqkOntoPFKWxiE4w4tV-NE=" : v
+        url: String,
+        filename: String
     },
     price: {
         type: Number,
@@ -33,8 +32,8 @@ let listingSchema = new Schema({
             ref: "Review"
         }
     ],
-    owner :{
-        type : Schema.Types.ObjectId,
+    owner: {
+        type: Schema.Types.ObjectId,
         ref: "User"
     }
 
