@@ -6,7 +6,8 @@
             <div class="col-8 offset-2">
                 <br>
                 <h1>Create new listing</h1>
-                <form method="post" action="/listing" novalidate class="needs-validation" enctype="multipart/form-data">
+                <form id="listingForm" method="post" action="/listing" novalidate class="needs-validation"
+                    enctype="multipart/form-data">
                     <div class="mb-3">
                         <label class="form-label" for="title">Title</label>
                         <input required name="listing[title]" type="text" placeholder="Enter the title"
@@ -21,7 +22,7 @@
                         <div class="invalid-feedback">Please enter short description !</div>
                     </div>
 
-                    
+
                     <div class="mb-3">
                         <label class="form-label" for="image">Upload Image </label>
                         <input required name="listing[img]" type="file" class="form-control">
@@ -44,14 +45,14 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label" for="location">Location</label>
-                        <input required name="listing[location]" type="text" class="form-control"
+                        <input required id="place" name="listing[location]" type="text" class="form-control"
                             placeholder="Enter the location :">
                         <div class="invalid-feedback">Please enter valid Location !</div>
                     </div>
-
                     <button class="btn btn-dark add-btn">Add </button>
                     <br><br>
                 </form>
             </div>
 
         </div>
+        <!-- <script src="/JS/map.js"></script> -->

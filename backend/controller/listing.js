@@ -17,7 +17,8 @@ module.exports.addNewListing = async (req, res) => {
     newlisting.img.url = req.file.path;
     newlisting.img.filename = req.file.filename;
     newlisting.save();
-    console.log("Listing Successful :", newlisting);
+    // let place = newlisting.location;
+    console.log("\nListing Successful :", newlisting);
     req.flash("success", "New Listing Added Successfully ...!");
     res.redirect("/listing");
 }

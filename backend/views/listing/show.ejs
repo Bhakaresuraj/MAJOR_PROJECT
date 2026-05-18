@@ -1,5 +1,8 @@
 <% let path="layouts/boilerplate" ; %>
     <%layout(path)%>
+        <p id="location" hidden>
+            <%= listing.location %>
+        </p>
         <div class="row mt-3">
             <div class="col-8 offset-2">
 
@@ -11,7 +14,8 @@
 
             <div class="col-8 offset-2">
                 <div class="card listing-card ">
-                    <img class="card-img-top show-image" src="<%=listing.img.url%>" alt="listing image">
+                    <img class="card-img-top show-image" style="width: 50px; height: 300px;" src="<%=listing.img.url%>"
+                        alt="listing image">
                     <div class="card-body">
 
                         <br>
@@ -31,8 +35,6 @@
                         <p class="card-text">
                             <%=listing.location%>
                         </p>
-
-
                         </p>
                     </div>
                 </div>
@@ -56,11 +58,6 @@
                             <h4>Leave a rivew</h4>
                             <form class="needs-validation" novalidate action="/listing/<%=listing._id%>/reviews"
                                 method="POST">
-                                <!-- <div class="mb-3 mt-3">
-                                    <label class="form-label" for="rating">Rating</label>
-                                    <input class="form-range" type="range" min="1" max="5" id="rating"
-                                        name="review[rating]">
-                                </div> -->
                                 <div class="mb-3 mt-3">
                                     <label class="form-label" for="rating">Rating</label>
                                     <fieldset class="starability-slot ">
@@ -91,39 +88,44 @@
                             <hr>
                             <%}%>
 
+                                <% if (listing.reviews.length>0){%>
+                                    <p><b>All reviews..!</b></p>
+                                    <div class="row ">
+                                        <% for (let review of listing.reviews){%>
+                                            <!-- <h1></h1> -->
+                                            <div class="card col-5 mb-3 ms-3">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">
+                                                        @<%=review.owner.username%>
+                                                    </h5>
+                                                    <p class="starability-result card-text"
+                                                        data-rating="<%=review.rating%>">
+                                                    </p>
+                                                    <p class="card-text">
+                                                        <%=review.comment%>
+                                                    </p>
 
-                                <p><b>All reviews..!</b></p>
-                                <div class="row ">
-                                    <% for (let review of listing.reviews){%>
-                                        <!-- <h1></h1> -->
-                                        <div class="card col-5 mb-3 ms-3">
-                                            <div class="card-body">
-                                                <h5 class="card-title">
-                                                    @<%=review.owner.username%>
-                                                </h5>
-                                                <p class="starability-result card-text"
-                                                    data-rating="<%=review.rating%>">
-                                                </p>
-                                                <p class="card-text">
-                                                    <%=review.comment%>
-                                                </p>
-
+                                                </div>
+                                                <%if(currUser && review.owner._id.equals(currUser._id)){%>
+                                                    <form class="mb-2 mt-1" method="POST"
+                                                        action="/listing/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE">
+                                                        <button class="btn btn-sm btn-dark">delete</button>
+                                                    </form>
+                                                    <%}%>
                                             </div>
-                                            <%if(currUser && review.owner._id.equals(currUser._id)){%>
-                                                <form class="mb-2 mt-1" method="POST"
-                                                    action="/listing/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE">
-                                                    <button class="btn btn-sm btn-dark">delete</button>
-                                                </form>
-                                                <%}%>
-                                        </div>
-                                        <%}%>
-                                </div>
+                                            <%}%>
+                                    </div>
+                                    <%}%>
                     </div>
-                    <!-- <div class="col-8 offset-2"> -->
-                        <div class="col-8 offset-2" id="map"></div>
+
+                    <div class="col-8 offset-2">
+                        <h4>Location :</h4>
+                        <div id="map"></div>
                         <br>
-                    <!-- </div> -->
+                    </div>
+
 
 
         </div>
+        <script src="/JS/geocoding.js"></script>
         <script src="/JS/map.js"></script>
