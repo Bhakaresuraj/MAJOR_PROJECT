@@ -43,13 +43,16 @@ module.exports.showAllListings = async (req, res) => {
 module.exports.renderUpdateForm = async (req, res) => {
     let { id } = req.params;
     let listing = await Listing.findById(id).populate("owner");
-    // console.log(listing);
+
     if (!listing) {
         req.flash("error", "The listing you request does not exists");
-        res.redirect("/listing");
-    } else {
-        res.render("listing/edit.ejs", { listing });
+        return res.redirect("/listing");
     }
+    // console.log(listing);
+    let ori_url = listing.img.url;
+    ori_url = ori_url.replace("/upload", "/upload/w_250");
+    // ori_url = ori_url.replace("fit=crop&w=800&q=60", "fit=crop&w=150&q=7");
+    res.render("listing/edit.ejs", { listing, ori_url });
 
 }
 
@@ -57,7 +60,7 @@ module.exports.updateListing = async (req, res) => {
     let list = req.body;
     list.listing = { ...list.listing, owner: res.locals.currUser }
     let { id } = req.params;
-    let result = await Listing.findOneAndUpdate({ _id: id }, list.listing, { returnDocument: 'after' }); 
+    let result = await Listing.findOneAndUpdate({ _id: id }, list.listing, { returnDocument: 'after' });
     if (typeof req.file !== 'undefined') {
         url = req.file.path;
         filename = req.file.filename;

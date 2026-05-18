@@ -114,6 +114,13 @@ body {
     height: 30vh;
 }
 
-.btns{
+.btns {
     display: flex;
+}
+
+
+
+#map {
+    width: 100vh;
+    height: 400px;
 }
