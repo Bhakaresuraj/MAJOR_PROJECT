@@ -68,10 +68,10 @@ main().then(() => {
 
 
 
-//  root route
-app.get("/", (req, res) => {
-    res.send("working");
-});
+// //  root route
+// app.get("/", (req, res) => {
+//     res.send("working");
+// });
 
 // using sessions middleware ...
 app.use(sessions(sessiosOpt));

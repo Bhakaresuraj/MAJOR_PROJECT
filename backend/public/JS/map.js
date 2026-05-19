@@ -58,7 +58,7 @@ async function loadMap() {
       coordinates.lat
     ],
 
-    zoom: 10
+    zoom: 0
 
   });
 

@@ -17,3 +17,24 @@
         }, false)
     })
 })()
+
+document.addEventListener("DOMContentLoaded", () => {
+    const taxSwitch = document.getElementById("taxSwitch");
+    const taxInfos = document.querySelectorAll(".tax-info");
+    const filters = document.querySelectorAll(".filter");
+
+    if (taxSwitch) {
+        taxSwitch.addEventListener("change", () => {
+            taxInfos.forEach((info) => {
+                info.style.display = taxSwitch.checked ? "inline" : "none";
+            });
+        });
+    }
+
+    filters.forEach((filter) => {
+        filter.addEventListener("click", () => {
+            filters.forEach((item) => item.classList.remove("active"));
+            filter.classList.add("active");
+        });
+    });
+});
