@@ -10,13 +10,8 @@ const listingRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-//  requiring wrapAsync function-------------
-// const wrapAsync = require("./utils/wrapAsync.js");
 
 const ExpressError = require("./utils/ExpressError.js");
-
-// listingSchema for schema validation 
-// const { listingSchema, reviewSchema } = require("./Schema.js");
 
 // method-override package imported and used...
 const methodOverride = require("method-override");
@@ -44,9 +39,27 @@ const LocalStrategy = require("passport-local");
 
 // Adding sessions to the project ........
 const sessions = require("express-session");
+// const MongoStore = require('connect-mongo');
+const MongoStore = require("connect-mongo").default;
 const User = require("./models/user.js");
+let dburl = process.env.ATLAS_DB;
+
+const store = MongoStore.create({
+    crypto: {
+        secret: process.env.SECRET
+    },
+    mongoUrl: dburl,
+    touchAfter: 24 * 3600,
+
+});
+
+store.on("error", (err) => {
+    console.log("Error in Mongo session store :", err);
+})
+
 const sessiosOpt = {
-    secret: "Mysecretecode",
+    store,
+    secret: process.env.SECRET,
     resave: false,
     saveUninitialized: true,
     cookie: {
@@ -55,10 +68,13 @@ const sessiosOpt = {
         httpOnly: true
     }
 }
+// app.use(sessions(store))
+
+
 
 // database connection
 async function main() {
-    await mongoose.connect("mongodb://127.0.0.1:27017/wanderlust");
+    await mongoose.connect(dburl);
 }
 main().then(() => {
     console.log("Database connected successfully ........!");
@@ -75,6 +91,7 @@ main().then(() => {
 
 // using sessions middleware ...
 app.use(sessions(sessiosOpt));
+
 // using flash middleware
 app.use(flash());
 

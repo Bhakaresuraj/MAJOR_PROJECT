@@ -475,10 +475,10 @@ body {
    MAP MARKER & POPUP
    ============================================================ */
 .custom-marker {
-     position: relative;
+    position: relative;
     width: 30px;
     height: 30px;
-    background: red;
+    background: #fe424d;
     border-radius: 50% 50% 50% 50%;
     transform: rotate(-45deg);
     border: 3px solid white;
@@ -503,7 +503,7 @@ body {
 
 .custom-popup h4 {
     margin: 0;
-    color: rgb(247, 9, 13);
+    color: #fe424d;
     font-size: 16px;
 }
 

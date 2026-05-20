@@ -21,6 +21,7 @@ module.exports.addNewListing = async (req, res) => {
     console.log("\nListing Successful :", newlisting);
     req.flash("success", "New Listing Added Successfully ...!");
     res.redirect("/listing");
+
 }
 
 module.exports.showAllListings = async (req, res) => {
