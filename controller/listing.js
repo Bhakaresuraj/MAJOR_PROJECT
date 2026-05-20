@@ -11,13 +11,11 @@ module.exports.renderNewListing = (req, res) => {
 }
 
 module.exports.addNewListing = async (req, res) => {
-
     let newlisting = new Listing(req.body.listing);
     newlisting.owner = req.user._id;
     newlisting.img.url = req.file.path;
     newlisting.img.filename = req.file.filename;
-    newlisting.save();
-    // let place = newlisting.location;
+    await newlisting.save();
     console.log("\nListing Successful :", newlisting);
     req.flash("success", "New Listing Added Successfully ...!");
     res.redirect("/listing");
